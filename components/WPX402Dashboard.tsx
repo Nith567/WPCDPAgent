@@ -668,7 +668,7 @@ export default function USDCDashboard() {
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-gray-900">WP<span className="text-blue-600">USDC</span></span>
                 <p className="text-[10px] text-gray-500 leading-tight">
-                  Powered by <span className="text-blue-600 font-medium">Coinbase</span> & <span className="text-gray-700 font-medium">USDC</span>
+                  Powered by <span className="text-blue-600 font-medium">Coinbase</span> & <span className="text-gray-700 font-medium">0G</span>
                 </p>
               </div>
             </div>

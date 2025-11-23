@@ -14,5 +14,13 @@
     "wallet_address": "0xa92c5291e21f4229fed9b0cde0c0d5fcbffff6b7",
     "amount": 0.2,
     "timestamp": "2025-11-23T10:41:52.295Z"
+  },
+  {
+    "rootHash": "0x6cf205ab40e605a5b7113f31013614d98894304316e0817683ac64ab47b67612",
+    "txHash": "0xf86803639fe980c0336a09250e1954049844d062c4b94f571c9ad9d47acd3ccf",
+    "summary": "The x402 protocol is an open, blockchain-agnostic payment standard built on HTTP, enabling paywalled resources via a structured process. When a client requests a protected resource, the server responds with a **402 Payment Required** status and a JSON Payment Requirements object, detailing the payment method, amount, and destination. The client then includes a signed payment payload in the **X-PAYMENT** header on retry, which the server verifies and settles via designated endpoints. The protocol ensures seamless, blockchain-independent transactions by standardizing payment headers and JSON schemas.",
+    "wallet_address": "0xa92c5291e21f4229fed9b0cde0c0d5fcbffff6b7",
+    "amount": 0.2,
+    "timestamp": "2025-11-23T14:18:51.458Z"
   }
 ]

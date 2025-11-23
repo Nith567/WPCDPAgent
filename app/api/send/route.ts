@@ -56,7 +56,7 @@ async function queryAI(prompt: string): Promise<string | null> {
     console.log("💰 Current ledger balance:", balance.toString());
 
     try {
-      await broker.ledger.depositFund(10);
+      await broker.ledger.depositFund(1);
     } catch (err) {
       console.log("err   r", err);
     }
