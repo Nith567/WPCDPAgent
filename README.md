@@ -1,183 +1,231 @@
-# WPAgent - WordPress Content Monetization Platform
+# **WPAgent: AI-Native Monetization for WordPress Creators**
 
-**Empowering WordPress creators with AI-powered content monetization through blockchain technology**
+Empowering WordPress creators to monetize premium content with AI-powered discovery, decentralized storage, and seamless crypto payments.
 
-## 🌟 The Problem
+---
 
-Over 40% of the web is powered by WordPress. Yet, content creators face a growing threat: AI systems and bots scrape blogs illegally, using this content to train models or answer queries, without consent, compensation, or even attribution.
+## 🌟 Problem
 
-Content creators invest time and energy into producing valuable articles. But once published, they have little to no control over how that content is consumed or monetized. This has created a massive imbalance where platforms benefit, but the original authors do not.
+Over **40 percent of the internet runs on WordPress**, yet content creators are losing control of their work. AI systems and bots scrape blogs without consent, attribution, or compensation.
+Creators invest time and expertise into writing valuable articles, but once published, content becomes freely copyable and nearly impossible to protect.
+
+This creates a massive imbalance: **platforms benefit, while creators earn nothing**.
+
+---
 
 ## 💡 Our Solution
 
-WPAgent revolutionizes how WordPress creators monetize their content. Instead of publishing directly to the open web where content can be scraped freely, creators can:
+WPAgent gives creators **full control and monetization power** using Web3 + AI.
 
-1. **Monetize Before Publishing** - Keep valuable content protected while still earning revenue
-2. **AI-Powered Discovery** - Let users discover content through natural language queries
-3. **Direct Creator Payments** - Receive USDC payments directly to their wallet
-4. **No Intermediaries** - Connect creators and consumers directly
+Instead of publishing publicly and getting scraped, creators can:
 
-## 🏗️ Architecture
+* **Monetize before publishing** and protect premium content
+* **Let users discover content via natural-language queries**
+* **Receive direct USDC payments** to their wallet
+* **Remove intermediaries** between creators and readers
 
-### For WordPress Creators
+WPAgent connects creators and consumers through an AI agent interface backed by decentralized infrastructure.
 
-**WordPress Plugin** ([Repository](https://github.com/Nith567/WPPlugin))
-- Install via ZIP upload in WordPress admin dashboard
-- Works with local WordPress instances (tested with XAMPP)
-- Add "Monetize" button to any post instead of "Publish"
-- Content gets stored on 0G Network for decentralized storage
-- AI analysis generates 3-4 sentence summaries using 0G Inference SDK
+---
 
-### For Content Consumers
+## 🏗️ Architecture Overview
 
-**WPAgent Platform** (This Repository)
-- Login with email via Coinbase CDP embedded wallets
-- Automatic wallet creation and management
-- Natural language content discovery powered by AI agent
-- Seamless USDC payments using embedded wallets
-- Access to premium WordPress content after payment
+### **For WordPress Creators**
+
+WordPress Plugin → <repo link>
+
+* Install via simple ZIP upload
+* Works with local WordPress (tested with XAMPP)
+* Adds a **"Monetize"** button beside the classic **"Publish"**
+* Stores content on the **0G Network** for decentralized protection
+* Generates 3–4 sentence AI summaries via **0G Inference SDK**
+
+---
+
+### **For Content Consumers**
+
+WPAgent Platform (this repo)
+
+* Email login via **Coinbase CDP Embedded Wallets**
+* Auto-created wallets, no crypto knowledge needed
+* AI agent for natural-language discovery
+* One-click **USDC payments on Base Sepolia**
+* Instant, secure access to premium content
+
+---
 
 ## 🚀 Key Features
 
-### 🔐 **Protected Content Monetization**
-- Creators can monetize without public publishing
-- Content stored securely on 0G Network
-- Direct creator-to-consumer payments
+### 🔐 Protected Content Monetization
 
-### 🤖 **AI-Powered Content Discovery**
-- Ask questions like "Show me content about blockchain development"
-- AI agent searches through creator-submitted content
-- Displays summaries, prices, and creator information
+* Monetize without publishing publicly
+* Decentralized content storage on 0G
+* Direct creator wallet payouts
 
-### 💰 **Seamless Crypto Payments**
-- Embedded Coinbase wallets for easy onboarding
-- USDC payments on Base Sepolia network
-- No complex wallet setup required
-- Built-in onramp for traditional payment methods
+### 🤖 AI-Powered Content Discovery
 
-### 📊 **Creator Analytics**
-- Track content performance and earnings
-- View audience engagement metrics
-- Optimize pricing strategies
+* Ask questions like *“Show me content on blockchain development”*
+* AI agent fetches relevant content, summaries, and prices
+* Personalizes user discovery
+
+### 💰 Seamless Crypto Payments
+
+* Embedded Coinbase wallets
+* USDC transactions on Base Sepolia
+* Card on-ramp for non-crypto users
+
+### 📊 Creator Analytics
+
+* Track views, purchases, and earnings
+* Monitor engagement
+* Optimize pricing
+
+---
 
 ## 🛠️ Tech Stack
 
-### Blockchain & Payments
-- **Coinbase CDP** - Embedded wallets and authentication
-- **Coinbase Agentkit Framework** - AI agent infrastructure
-- **Base Sepolia** - USDC payments and transactions
-- **Viem** - Ethereum interactions
+### **Blockchain & Payments**
 
-### Storage & AI
-- **0G Network** - Decentralized content storage
-- **0G Inference SDK** - AI-powered content analysis
-- **Content summarization** - Automated blog analysis
+* Coinbase CDP Embedded Wallets
+* Coinbase AgentKit
+* Base Sepolia (USDC)
+* Viem
 
-### Frontend & Backend
-- **Next.js 14** - Full-stack React framework
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Modern UI styling
+### **Storage & AI**
+
+* 0G Network (decentralized storage)
+* 0G Inference SDK
+* Automated AI content summarization
+
+### **Frontend / Backend**
+
+* Next.js 14
+* TypeScript
+* Tailwind CSS
+
+---
 
 ## 🎯 Hackathon Sponsors
 
-This project is built using technologies from our amazing sponsors:
+Built using technologies from:
 
-- **🌐 0G Network** - Decentralized storage and AI inference
-- **🔵 Coinbase** -CDP Embedded wallets, OnRamps, and Agentkit Framework
+* **0G Network**
+* **Coinbase** (CDP, AgentKit, Onramp)
+
+---
 
 ## 📋 Prerequisites
 
-- Node.js v20+ (install via [nvm](https://github.com/nvm-sh/nvm))
-- pnpm v10 (install via [pnpm.io/installation](https://pnpm.io/installation))
-- WordPress site with our plugin installed
+* Node.js v20+
+* pnpm v10
+* A WordPress site with the WPAgent plugin installed
+
+---
 
 ## 🚀 Quick Start
 
-1. **Clone and Install**
+### Clone and Install
+
 ```bash
 git clone <repository-url>
 cd wpagent
 pnpm install
 ```
 
-2. **Environment Setup**
+### Environment Variables
+
 ```bash
 cp .env.example .env
-# Add your configuration variables
+# Add your configuration values
 ```
 
-3. **Start Development Server**
+### Start Dev Server
+
 ```bash
 pnpm dev
 ```
 
-4. **Install WordPress Plugin**
-- Download from: https://github.com/Nith567/WPPlugin
-- Upload ZIP to WordPress admin
-- Activate plugin
-- Start monetizing your content!
+### Install WordPress Plugin
+
+* Download: [https://github.com/Nith567/WPPlugin](https://github.com/Nith567/WPPlugin)
+* Upload ZIP in WordPress Admin → Plugins
+* Activate
+* Start monetizing your posts
+
+---
 
 ## 🎮 How It Works
 
-### For Creators:
-1. **Install Plugin** - Add WPAgent plugin to WordPress
-2. **Create Content** - Write your blog post as usual
-3. **Monetize** - Click "Monetize" instead of "Publish"
-4. **Set Price** - Choose your USDC price
-5. **Earn** - Receive payments directly to your wallet
+### **Creators**
 
-### For Consumers:
-1. **Sign In** - Login with email (auto-creates wallet)
-2. **Ask AI** - "Show me content about Web3 development"
-3. **Browse Results** - See summaries, prices, creators
-4. **Pay & Read** - One-click USDC payment to access content
-5. **Enjoy** - Read premium content directly
+1. Install WPAgent plugin
+2. Write your post
+3. Click **Monetize** instead of **Publish**
+4. Set your price in USDC
+5. Earn instantly as readers purchase your content
 
+### **Consumers**
+
+1. Login with email → auto wallet creation
+2. Ask the AI agent for the content you want
+3. Browse summaries and pricing
+4. One-click pay with USDC
+5. Unlock and read premium posts
+
+---
 
 ## 🔥 Demo Flow
 
-### Creator Journey
-1. **Local WordPress Setup** (XAMPP)
-2. **Install WPAgent Plugin** via ZIP upload
-3. **Write Content** in WordPress editor
-4. **Click "Monetize"** - content goes to 0G Network
-5. **AI Analysis** creates summary via 0G Inference SDK
-6. **Content Listed** in WPAgent marketplace
+### **Creator Journey**
 
-### User Journey
-1. **Visit WPAgent** platform
-2. **Email Login** - Coinbase CDP creates embedded wallet
-3. **Ask AI Agent**: "Show me blockchain tutorials"
-4. **Browse Results** - AI shows relevant content with prices
-5. **One-Click Payment** - USDC sent to creator automatically
-6. **Access Content** - Read premium WordPress content
+* Local WordPress via XAMPP
+* Install plugin
+* Write → Monetize
+* Content uploaded to 0G
+* AI summary generation
+* Marketplace listing on WPAgent
+
+### **User Journey**
+
+* Visit WPAgent
+* Login with email
+* Ask AI: *“Show me blockchain tutorials”*
+* View results with summaries + prices
+* One-click USDC purchase
+* Instant content access
+
+---
 
 ## 🏆 Innovation Highlights
 
-- **First-of-its-kind** WordPress monetization without public publishing
-- **AI-Native Discovery** - Natural language content search
-- **Frictionless Payments** - No wallet setup complexity
-- **Creator Empowerment** - Direct monetization control
-- **Decentralized Storage** - Content protected on 0G Network
+* First WordPress monetization system for **non-public content**
+* AI-native content discovery
+* Seamless crypto payments without wallet friction
+* Decentralized content storage
+* Direct creator empowerment
+
+---
 
 ## 🌍 Impact
 
-**For Creators:**
-- 💰 Monetize content without losing control
-- 🔒 Protect IP from unauthorized scraping  
-- 📈 Direct audience connection
-- 💪 Fair compensation for valuable content
+### **For Creators**
 
-**For Consumers:**
-- 🎯 Discover high-quality, curated content
-- 💳 Easy crypto payments with embedded wallets
-- 🤝 Support creators directly
-- 🔍 AI-powered content discovery
+* Protect IP from scraping
+* Direct monetization
+* Control pricing and distribution
+* Build stronger creator-consumer relationships
+
+### **For Consumers**
+
+* Discover quality content easily
+* Frictionless payments
+* Support creators directly
+* AI-powered search
+
+---
 
 ## 🛡️ Security & Privacy
 
-- **Decentralized Storage** - Content on 0G Network
-- **Embedded Wallets** - Coinbase CDP security standards
-- **Creator Control** - Full ownership of content and pricing
-
-*Empowering WordPress creators to monetize their content in the decentralized web*
+* Decentralized storage on 0G Network
+* Coinbase-grade wallet security
+* Complete creator ownership of content and pricing
