@@ -6,7 +6,6 @@ import * as fs from "fs";
 import * as path from "path";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { saveContent } from "@/lib/contentStorage";
-import { clearConfigCache } from "prettier";
 
 interface UploadRequest {
   content: string;
@@ -18,8 +17,6 @@ const OFFICIAL_PROVIDERS = {
   "llama-3.3-70b-instruct": "0xf07240Efa67755B5311bc75784a061eDB47165Dd",
   "deepseek-r1-70b": "0x3feE5a4dd5FDb8a32dDA97Bed899830605dBD9D3",
 };
-
-const INITIAL_FUND_AMOUNT = 10;
 
 const RPC_URL = process.env.RPC_URL || "https://evmrpc-testnet.0g.ai/";
 const INDEXER_RPC = process.env.INDEXER_RPC || "https://indexer-storage-testnet-turbo.0g.ai";
@@ -47,7 +44,6 @@ async function queryAI(prompt: string): Promise<string | null> {
     // -----------------------------
     // LEDGER - AUTO TOP UP
     // -----------------------------
-    const MIN_REQUIRED = 12; // 15 ZG
     console.log("📘 Checking ledger...");
 
     let ledger = await broker.ledger.getLedger();
