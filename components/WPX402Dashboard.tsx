@@ -255,6 +255,31 @@ export default function USDCDashboard() {
     }
   };
 
+  // Function to render message content with clickable links
+  const renderMessageContent = (content: string) => {
+    // Convert markdown-style links [text](url) to clickable links
+    const parts = content.split(/(\[.*?\]\(.*?\))/g);
+    
+    return parts.map((part, index) => {
+      const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+      if (linkMatch) {
+        const [, text, url] = linkMatch;
+        return (
+          <a
+            key={index}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline font-medium"
+          >
+            {text}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   const handleSearch = async () => {
     if (!query.trim()) return;
     
@@ -284,20 +309,33 @@ export default function USDCDashboard() {
                         responseText.includes("Here's what I discovered") ||
                         responseText.includes("**Summary:**") ||
                         responseText.includes("**Root Hash:**") ||
-                        responseText.includes("**Price:**");
+                        responseText.includes("**Price:**") ||
+                        responseText.includes("Price:") ||
+                        responseText.includes("💰 **Price:**") ||
+                        responseText.includes("�") ||
+                        responseText.includes("�👤 **Creator:**") ||
+                        responseText.includes("👤") ||
+                        responseText.includes("Would you like to access this content?") ||
+                        responseText.includes("USDC");
       
       console.log('Response text:', responseText);
       console.log('Has content:', hasContent);
       console.log('Tool results:', data.toolResults);
       
+      // Debug: check specific patterns
+      console.log('Contains 💰:', responseText.includes("💰"));
+      console.log('Contains 👤:', responseText.includes("👤"));
+      console.log('Contains USDC:', responseText.includes("USDC"));
+      console.log('Contains "Would you like":', responseText.includes("Would you like to access this content?"));
+      
       // Extract content data if available
       let contentData;
       if (hasContent) {
-        // Try to extract from agent's structured response
+        // Try to extract from agent's structured response - handle emoji format
         const summaryMatch = responseText.match(/\*\*Summary:\*\*\s*([^\n\*]+)/);
-        const priceMatch = responseText.match(/\*\*Price:\*\*\s*([\d.]+)/);
+        const priceMatch = responseText.match(/(?:💰\s*\*\*Price:\*\*|Price:\*\*|\*\*Price:\*\*|Price:)\s*([\d.]+)/);
         const rootHashMatch = responseText.match(/\*\*Root Hash:\*\*\s*([0-9a-fA-Fx]+)/);
-        const creatorMatch = responseText.match(/\*\*Creator Address:\*\*\s*([0-9a-fA-Fx]+)/);
+        const creatorMatch = responseText.match(/(?:👤\s*\*\*Creator:\*\*|Creator:\*\*|\*\*Creator:\*\*|Creator:)\s*([0-9a-fA-Fx]+)/);
         
         console.log('Extracted matches:', {
           summary: summaryMatch?.[1],
@@ -306,13 +344,37 @@ export default function USDCDashboard() {
           creator: creatorMatch?.[1]
         });
         
+        console.log('Tool results detailed:', data.toolResults);
+        
         // Also check if there's tool response data with rootHash
         let rootHash = rootHashMatch?.[1] || "";
         let wallet_address = creatorMatch?.[1] || "";
         
-        // Look for tool response in the data
+        // Look for tool response in the data - tool results contain the actual metadata
         if (data.toolResults && Array.isArray(data.toolResults)) {
           for (const toolResult of data.toolResults) {
+            console.log('Processing tool result:', toolResult);
+            
+            if (toolResult.result && typeof toolResult.result === 'string') {
+              // Parse the string result to extract rootHash and wallet_address
+              const resultText = toolResult.result;
+              console.log('Tool result text:', resultText);
+              
+              const rootHashInResult = resultText.match(/RootHash:\s*([0-9a-fA-Fx]+)/);
+              const walletInResult = resultText.match(/Creator:\s*([0-9a-fA-Fx]+)/);
+              
+              console.log('Found in tool result - rootHash:', rootHashInResult?.[1], 'wallet:', walletInResult?.[1]);
+              
+              if (rootHashInResult?.[1]) {
+                rootHash = rootHashInResult[1];
+              }
+              if (walletInResult?.[1]) {
+                wallet_address = walletInResult[1];
+              }
+              
+              if (rootHash && wallet_address) break;
+            }
+            // Also check if it's an object format (backup)
             if (toolResult.result && typeof toolResult.result === 'object') {
               const result = toolResult.result;
               if (result.rootHash) {
@@ -330,9 +392,41 @@ export default function USDCDashboard() {
           }
         }
         
-        if ((summaryMatch || responseText.includes("Found it!")) && priceMatch && rootHash) {
+        console.log('Final extracted values:', { rootHash, wallet_address });
+        
+        // Create content data if we have price information (even without summary or rootHash from response)
+        if (priceMatch && wallet_address) {
+          // Determine rootHash based on price if not extracted from tool results
+          let finalRootHash = rootHash;
+          if (!finalRootHash) {
+            // Fetch content metadata to map price to correct rootHash dynamically
+            try {
+              const metadataResponse = await fetch('/api/content-metadata');
+              if (metadataResponse.ok) {
+                const contentMetadata = await metadataResponse.json();
+                const price = parseFloat(priceMatch[1]);
+                
+                // Find content with matching price
+                const matchingContent = contentMetadata.find((item: any) => item.amount === price);
+                if (matchingContent) {
+                  finalRootHash = matchingContent.rootHash;
+                  console.log(`Found content for price ${price} USDC:`, matchingContent.rootHash);
+                } else {
+                  // If no exact match, use the first available content as fallback
+                  finalRootHash = contentMetadata[0]?.rootHash || "";
+                  console.log('No exact price match found, using first available content:', finalRootHash);
+                }
+              } else {
+                console.warn('Could not fetch content metadata');
+              }
+            } catch (error) {
+              console.error('Error fetching content metadata:', error);
+            }
+          }
+          
+          // Use extracted values or defaults
           contentData = {
-            rootHash: rootHash,
+            rootHash: finalRootHash,
             txHash: "",
             wallet_address: wallet_address,
             amount: priceMatch[1],
@@ -346,7 +440,7 @@ export default function USDCDashboard() {
         role: "assistant",
         content: responseText,
         timestamp: new Date(),
-        showActions: hasContent,
+        showActions: hasContent && contentData !== undefined, // Show actions if we have content AND contentData
         contentData
       };
       setMessages(prev => [...prev, aiMessage]);
@@ -379,6 +473,33 @@ export default function USDCDashboard() {
       if (!message.contentData) {
         throw new Error("Content data not found");
       }
+      
+      // Recalculate the correct rootHash based on price to ensure we use the right one
+      const price = parseFloat(message.contentData.amount);
+      let correctRootHash = message.contentData.rootHash; // Start with what we have
+      
+      // Fetch content metadata to get the correct rootHash dynamically
+      try {
+        const metadataResponse = await fetch('/api/content-metadata');
+        if (metadataResponse.ok) {
+          const contentMetadata = await metadataResponse.json();
+          
+          // Find content with matching price
+          const matchingContent = contentMetadata.find((item: any) => item.amount === price);
+          if (matchingContent) {
+            correctRootHash = matchingContent.rootHash;
+            console.log(`Found content for price ${price} USDC:`, matchingContent.rootHash);
+          } else {
+            console.log(`No content found for price ${price} USDC, using existing rootHash:`, correctRootHash);
+          }
+        } else {
+          console.warn('Could not fetch content metadata, using existing rootHash');
+        }
+      } catch (error) {
+        console.error('Error fetching content metadata:', error);
+      }
+      
+      console.log('Price:', price, 'Using rootHash:', correctRootHash);
       
       // Show transfer processing message
       const transferMessage: ChatMessage = {
@@ -451,7 +572,7 @@ export default function USDCDashboard() {
       // Show transfer success message
       const successMessage: ChatMessage = {
         role: "assistant",
-        content: `✅ USDC Transfer Successful!\n\n� Sent ${message.contentData.amount} USDC\n� To: ${toAddress}\n🔗 TX: ${transferTx}\n\n⏳ Now downloading content...`,
+        content: `✅ USDC Transfer Successful!\n\n� Sent ${message.contentData.amount} USDC\n� To: ${toAddress}\n🔗 **Transaction:** [View on BaseScan](https://sepolia.basescan.org/tx/${transferTx})\n\n⏳ Now downloading content...`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, successMessage]);
@@ -459,8 +580,8 @@ export default function USDCDashboard() {
       // Wait a moment for transaction to process, then fetch content
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Fetch content from API
-      const contentUrl = `${window.location.origin}/api/content/${rootHash}`;
+      // Fetch content from API using the correct rootHash
+      const contentUrl = `${window.location.origin}/api/content/${correctRootHash}`;
       const contentResponse = await fetch(contentUrl);
       
       if (!contentResponse.ok) {
@@ -472,7 +593,7 @@ export default function USDCDashboard() {
       // Show content
       const contentMessage: ChatMessage = {
         role: "assistant",
-        content: `� **Your Content:**\n\n${contentData.content}\n\n---\n📊 **Metadata:**\n- Summary: ${contentData.metadata.summary}\n- Creator: ${contentData.metadata.creator}\n- Price: ${contentData.metadata.price} USDC\n- Payment TX: ${transferTx}\n\n✨ Thank you for your payment! Enjoy your content.`,
+        content: `� **Your Content:**\n\n${contentData.content}\n\n---\n📊 **Metadata:**\n- Summary: ${contentData.metadata.summary}\n- Creator: ${contentData.metadata.creator}\n- Price: ${contentData.metadata.price} USDC\n- Payment TX: [View on BaseScan](https://sepolia.basescan.org/tx/${transferTx})\n\n✨ Thank you for your payment! Enjoy your content.`,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, contentMessage]);
@@ -708,7 +829,7 @@ export default function USDCDashboard() {
                               : "bg-white border-2 border-blue-200 text-gray-800"
                           }`}>
                             <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                              {msg.content}
+                              {renderMessageContent(msg.content)}
                             </div>
                             
                             {/* Action Buttons for content access */}
