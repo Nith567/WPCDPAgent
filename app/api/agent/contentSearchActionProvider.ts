@@ -35,10 +35,10 @@ export function contentSearchActionProvider() {
           }
           
           const resultsList = results.map((r, i) => 
-            `${i + 1}. Summary: ${r.summary}\n   RootHash: ${r.rootHash}\n   TxHash: ${r.txHash}\n   Creator: ${r.wallet_address}\n   Amount: ${r.amount} tokens\n   Timestamp: ${r.timestamp}`
+            `${i + 1}. Summary: ${r.summary}\n   RootHash: ${r.rootHash}\n   TxHash: ${r.txHash}\n   Creator: ${r.wallet_address}\n   Amount: ${r.amount} USDC\n   Timestamp: ${r.timestamp}`
           ).join('\n\n');
           
-          return `Found ${results.length} content item(s) matching "${args.query}":\n\n${resultsList}`;
+          return `Found ${results.length} content item(s) matching "${args.query}":\n\n${resultsList}\n\nUse this data to create a proper response with the actual creator addresses and root hashes.`;
         } catch (error) {
           return `Search failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
         }
@@ -64,7 +64,7 @@ export function contentSearchActionProvider() {
             return `Failed to download content from 0G Storage for rootHash: ${args.rootHash}. The content may be unavailable or the storage network may be down.`;
           }
           
-          return `Content retrieved successfully!\n\nMetadata:\n- RootHash: ${metadata.rootHash}\n- TxHash: ${metadata.txHash}\n- Summary: ${metadata.summary}\n- Creator: ${metadata.wallet_address}\n- Amount: ${metadata.amount} tokens\n- Timestamp: ${metadata.timestamp}\n\nFull Content:\n${content}`;
+          return `Content retrieved successfully!\n\nMetadata:\n- RootHash: ${metadata.rootHash}\n- TxHash: ${metadata.txHash}\n- Summary: ${metadata.summary}\n- Creator: ${metadata.wallet_address}\n- Amount: ${metadata.amount} USDC\n- Timestamp: ${metadata.timestamp}\n\nFull Content:\n${content}`;
         } catch (error) {
           return `Download failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
         }
@@ -78,7 +78,7 @@ export function contentSearchActionProvider() {
         try {
           const stats = getContentStats();
           
-          return `Content Statistics:\n- Total Content: ${stats.totalContent} items\n- Total Earnings: ${stats.totalEarnings.toFixed(4)} tokens\n- Unique Creators: ${stats.uniqueWallets} wallets`;
+          return `Content Statistics:\n- Total Content: ${stats.totalContent} items\n- Total Earnings: ${stats.totalEarnings.toFixed(4)} USDC\n- Unique Creators: ${stats.uniqueWallets} wallets`;
         } catch (error) {
           return `Failed to get stats: ${error instanceof Error ? error.message : 'Unknown error'}`;
         }
