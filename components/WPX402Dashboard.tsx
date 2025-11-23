@@ -809,6 +809,22 @@ export default function USDCDashboard() {
         </div>
       </div>
 
+      {/* ONRAMP Modal */}
+      {isOnrampModalOpen && evmAddress && (
+        <FundModal
+          open={isOnrampModalOpen}
+          setIsOpen={setIsOnrampModalOpen}
+          country="US"
+          subdivision="CA"
+          cryptoCurrency="usdc"
+          fiatCurrency="usd"
+          network="base"
+          presetAmountInputs={[2, 5, 10]}
+          fetchBuyQuote={fetchBuyQuote}
+          fetchBuyOptions={fetchBuyOptions}
+          onSuccess={handleOnrampSuccess}
+        />
+      )}
     </div>
   );
 }

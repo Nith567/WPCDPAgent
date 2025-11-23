@@ -63,13 +63,6 @@ export default function WPX402SignIn() {
           </div>
 
 
-        <SignInModal>
-        <button>
-          Get started with coinbase
-        </button>
-        </SignInModal>
-
-
           <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
               <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
