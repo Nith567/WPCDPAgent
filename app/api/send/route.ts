@@ -6,6 +6,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { saveContent } from "@/lib/contentStorage";
+import { clearConfigCache } from "prettier";
 
 interface UploadRequest {
   content: string;
@@ -19,39 +20,64 @@ const OFFICIAL_PROVIDERS = {
   "deepseek-r1-70b": "0x3feE5a4dd5FDb8a32dDA97Bed899830605dBD9D3"
 };
 
-const INITIAL_FUND_AMOUNT = 0.07;
+const INITIAL_FUND_AMOUNT = 10;
 
 const RPC_URL = process.env.RPC_URL || 'https://evmrpc-testnet.0g.ai/';
 const INDEXER_RPC = process.env.INDEXER_RPC || 'https://indexer-storage-testnet-turbo.0g.ai';
 
- export async function queryAI(prompt: string): Promise<string | null> {
+export async function queryAI(prompt: string): Promise<string | null> {
   try {
-    const privateKey =
-      process.env.ZG_PRIVATE_KEY;
+    console.log("🔥 queryAI starting bro...");
+
+    // -----------------------------
+    // WALLET + BROKER
+    // -----------------------------
+    const privateKey = process.env.ZG_PRIVATE_KEY;
+    if (!privateKey) throw new Error("Missing ZG_PRIVATE_KEY bro");
 
     const provider = new ethers.JsonRpcProvider("https://evmrpc-testnet.0g.ai");
     const wallet = new ethers.Wallet(privateKey, provider);
     const broker = await createZGComputeNetworkBroker(wallet);
 
-    // -----------------------------
-    // FUND LEDGER
-    // -----------------------------
-    try {
-      await broker.ledger.getLedger();
-    } catch {
-      await broker.ledger.addLedger(INITIAL_FUND_AMOUNT);
-      await broker.ledger.getLedger();
-    }
+    console.log("🔑 Wallet:", wallet.address);
 
+    // -----------------------------
+    // LEDGER - AUTO TOP UP
+    // -----------------------------
+    const MIN_REQUIRED = 12 // 15 ZG
+    console.log("📘 Checking ledger...");
+
+    let ledger = await broker.ledger.getLedger();
+    let balance = BigInt(ledger[1] ?? 0n);
+
+    console.log("💰 Current ledger balance:", balance.toString());
+
+try {
+      await broker.ledger.depositFund(10);
+}
+
+catch (err){
+  console.log ('err   r', err);
+}
+    // Refresh ledger
+    ledger = await broker.ledger.getLedger();
+    balance = BigInt(ledger[1] ?? 0n);
+    console.log("💵 Ledger after top-up:", balance.toString());
+
+    // -----------------------------
+    // PROVIDER
+    // -----------------------------
     const selectedProvider = OFFICIAL_PROVIDERS["deepseek-r1-70b"];
+    console.log("🤖 Using provider:", selectedProvider);
 
-    // -----------------------------
-    // ACKNOWLEDGE PROVIDER
-    // -----------------------------
+    // ACK PROVIDER
     try {
       await broker.inference.acknowledgeProviderSigner(selectedProvider);
-    } catch (err: unknown) {
-      if (err instanceof Error && !err.message.includes("already acknowledged")) {
+      console.log("📩 Provider acknowledged");
+    } catch (err: any) {
+      if (err?.message?.includes("already acknowledged")) {
+        console.log("✔️ Provider already acknowledged");
+      } else {
         throw err;
       }
     }
@@ -62,22 +88,26 @@ const INDEXER_RPC = process.env.INDEXER_RPC || 'https://indexer-storage-testnet-
     const { endpoint, model } =
       await broker.inference.getServiceMetadata(selectedProvider);
 
+    console.log("🌐 Endpoint:", endpoint, "🧠 Model:", model);
+
     const headers =
       await broker.inference.getRequestHeaders(selectedProvider, prompt);
+
+    const requestHeaders: Record<string, string> = {};
+    for (const [k, v] of Object.entries(headers)) {
+      if (typeof v === "string") requestHeaders[k] = v;
+    }
 
     const openai = new OpenAI({
       baseURL: endpoint,
       apiKey: "",
     });
 
-    const requestHeaders: Record<string, string> = {};
-    for (const [key, value] of Object.entries(headers)) {
-      if (typeof value === "string") requestHeaders[key] = value;
-    }
-
     // -----------------------------
     // AI COMPLETION
     // -----------------------------
+    console.log("🚀 Sending prompt:", prompt);
+
     const completion = await openai.chat.completions.create(
       {
         messages: [{ role: "user", content: prompt }],
@@ -89,8 +119,10 @@ const INDEXER_RPC = process.env.INDEXER_RPC || 'https://indexer-storage-testnet-
     const aiResponse = completion.choices[0].message.content ?? "";
     const chatId = completion.id;
 
+    console.log("🧾 AI Response:", aiResponse);
+
     // -----------------------------
-    // PROCESS RESPONSE (ignore fails)
+    // PROCESS RESPONSE
     // -----------------------------
     try {
       await broker.inference.processResponse(
@@ -98,16 +130,19 @@ const INDEXER_RPC = process.env.INDEXER_RPC || 'https://indexer-storage-testnet-
         aiResponse,
         chatId
       );
-    } catch {
-      console.error("Ignoring processResponse error");
+    } catch (err) {
+      console.log("⚠️ processResponse error ignored:", err);
     }
 
+    console.log("✅ queryAI finished clean bro");
     return aiResponse;
+
   } catch (error) {
-    console.error("AI query failed:", error);
+    console.error("💥 queryAI crashed bro:", error);
     return null;
   }
-} 
+}
+
 
 
 
