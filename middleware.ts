@@ -1,7 +1,10 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-
+/**
+ *
+ * @param request
+ */
 export function middleware(request: NextRequest) {
   // Just allow all requests to pass through
   return NextResponse.next();

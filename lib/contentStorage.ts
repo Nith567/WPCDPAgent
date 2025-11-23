@@ -44,19 +44,21 @@ export function getAllContent(): ContentMetadata[] {
 
 /**
  * Save new content metadata
+ *
+ * @param metadata
  */
 export function saveContent(metadata: ContentMetadata): boolean {
   try {
     initializeStorage();
     const allContent = getAllContent();
-    
+
     // Check if rootHash already exists
     const exists = allContent.some(c => c.rootHash === metadata.rootHash);
     if (exists) {
       console.log("Content with this rootHash already exists");
       return false;
     }
-    
+
     allContent.push(metadata);
     fs.writeFileSync(STORAGE_FILE, JSON.stringify(allContent, null, 2));
     console.log("Content metadata saved successfully:", metadata.rootHash);
@@ -69,16 +71,16 @@ export function saveContent(metadata: ContentMetadata): boolean {
 
 /**
  * Search content by query (searches in summaries)
+ *
+ * @param query
  */
 export function searchContent(query: string): ContentMetadata[] {
   try {
     const allContent = getAllContent();
     const queryLower = query.toLowerCase();
-    
+
     // Simple keyword search in summaries
-    return allContent.filter(content => 
-      content.summary.toLowerCase().includes(queryLower)
-    );
+    return allContent.filter(content => content.summary.toLowerCase().includes(queryLower));
   } catch (error) {
     console.error("Error searching content:", error);
     return [];
@@ -87,6 +89,8 @@ export function searchContent(query: string): ContentMetadata[] {
 
 /**
  * Get content by rootHash
+ *
+ * @param rootHash
  */
 export function getContentByRootHash(rootHash: string): ContentMetadata | null {
   try {
@@ -110,11 +114,11 @@ export function getContentStats(): {
     const allContent = getAllContent();
     const uniqueWallets = new Set(allContent.map(c => c.wallet_address));
     const totalEarnings = allContent.reduce((sum, c) => sum + parseFloat(c.amount || "0"), 0);
-    
+
     return {
       totalContent: allContent.length,
       totalEarnings,
-      uniqueWallets: uniqueWallets.size
+      uniqueWallets: uniqueWallets.size,
     };
   } catch (error) {
     console.error("Error getting content stats:", error);

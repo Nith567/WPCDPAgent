@@ -77,8 +77,9 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
     }
     const account = privateKeyToAccount(privateKey);
 
-    const rpcUrl = process.env.RPC_URL as string;
-    const chainId = process.env.CHAIN_ID as string;
+    // Remove unused variables - they're not needed for baseSepolia
+    // const rpcUrl = process.env.RPC_URL as string;
+    // const chainId = process.env.CHAIN_ID as string;
     const client = createWalletClient({
       account,
       chain: baseSepolia,
@@ -96,7 +97,7 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
     const canUseCdpApi = process.env.CDP_API_KEY_ID && process.env.CDP_API_KEY_SECRET;
     if (canUseCdpApi) {
       actionProviders.push(
-        //@ts-ignore
+        // @ts-expect-error - CDP API provider types may not be fully compatible
         cdpApiActionProvider({
           apiKeyId: process.env.CDP_API_KEY_ID,
           apiKeySecret: process.env.CDP_API_KEY_SECRET,
@@ -114,5 +115,3 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
     throw new Error("Failed to initialize agent");
   }
 }
-
-

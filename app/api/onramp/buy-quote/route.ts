@@ -1,13 +1,10 @@
-import {
-  type FetchBuyQuote,
-  type OnrampBuyQuoteSnakeCaseResponse,
-} from "@coinbase/cdp-react";
+import { type FetchBuyQuote, type OnrampBuyQuoteSnakeCaseResponse } from "@coinbase/cdp-react";
 import { NextRequest, NextResponse } from "next/server";
 
 import { generateCDPJWT, getCDPCredentials, ONRAMP_API_BASE_URL } from "@/lib/cdp-auth";
 import { convertSnakeToCamelCase } from "@/lib/to-camel-case";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 type OnrampBuyQuoteRequest = Parameters<FetchBuyQuote>[0];
 type OnrampBuyQuoteResponseRaw = OnrampBuyQuoteSnakeCaseResponse;
@@ -26,7 +23,8 @@ export async function POST(request: NextRequest) {
     // Validate CDP credentials are configured
     try {
       getCDPCredentials();
-    } catch (_error) {
+    } catch (error) {
+      console.error("CDP credentials error:", error);
       return NextResponse.json({ error: "CDP API credentials not configured" }, { status: 500 });
     }
 

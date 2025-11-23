@@ -1,5 +1,4 @@
-
-import { AgentRequest,AgentResponse } from "@/types/api";
+import { AgentRequest, AgentResponse } from "@/types/api";
 import { NextResponse } from "next/server";
 import { createAgent } from "./create-agent";
 import { Message, generateId, generateText } from "ai";
@@ -36,7 +35,6 @@ export async function POST(
     // 3.Start streaming the agent's response
     messages.push({ id: generateId(), role: "user", content: userMessage });
 
-    //@ts-ignore
     const result = await generateText({
       ...agent,
       messages,
@@ -46,9 +44,9 @@ export async function POST(
     messages.push({ id: generateId(), role: "assistant", content: result.text });
 
     // 5️. Return the final response including any tool results
-    return NextResponse.json({ 
+    return NextResponse.json({
       response: result.text,
-      toolResults: result.toolResults || []
+      toolResults: result.toolResults || [],
     });
   } catch (error) {
     console.error("Error processing request:", error);

@@ -1,7 +1,4 @@
-import {
-  type FetchBuyOptions,
-  type FetchBuyQuote,
-} from "@coinbase/cdp-react/components/Fund";
+import { type FetchBuyOptions, type FetchBuyQuote } from "@coinbase/cdp-react/components/Fund";
 
 /**
  * Fetches available buy options for onramp

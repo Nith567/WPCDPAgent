@@ -10,20 +10,20 @@ const nextConfig: NextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-    
+
     // Exclude problematic Zora SDK that's not needed
     if (isServer) {
       config.externals = config.externals || [];
       config.externals.push({
-        '@zoralabs/coins-sdk': 'commonjs @zoralabs/coins-sdk'
+        "@zoralabs/coins-sdk": "commonjs @zoralabs/coins-sdk",
       });
     }
-    
+
     // Ignore Zora SDK imports
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
-    config.resolve.alias['@zoralabs/coins-sdk'] = false;
-    
+    config.resolve.alias["@zoralabs/coins-sdk"] = false;
+
     return config;
   },
 };

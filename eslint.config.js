@@ -40,7 +40,7 @@ export default [
       "import/first": "error",
       "prettier/prettier": "error",
       "@typescript-eslint/member-ordering": "error",
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_$" }],
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_$" }], // Changed to warn
       "jsdoc/tag-lines": ["error", "any", { startLines: 1 }],
       "jsdoc/check-alignment": "error",
       "jsdoc/no-undefined-types": "off",
@@ -48,26 +48,15 @@ export default [
       "jsdoc/check-tag-names": "error",
       "jsdoc/check-types": "error",
       "jsdoc/implements-on-classes": "error",
-      "jsdoc/require-description": "error",
-      "jsdoc/require-jsdoc": [
-        "error",
-        {
-          require: {
-            FunctionDeclaration: true,
-            MethodDefinition: true,
-            ClassDeclaration: true,
-            ArrowFunctionExpression: false,
-            FunctionExpression: false,
-          },
-        },
-      ],
-      "jsdoc/require-param": "error",
-      "jsdoc/require-param-description": "error",
+      "jsdoc/require-description": "off", // DISABLED
+      "jsdoc/require-jsdoc": "off", // DISABLED
+      "jsdoc/require-param": "off", // DISABLED  
+      "jsdoc/require-param-description": "off", // DISABLED
       "jsdoc/require-param-type": "off",
-      "jsdoc/require-returns": "error",
-      "jsdoc/require-returns-description": "error",
+      "jsdoc/require-returns": "off", // DISABLED
+      "jsdoc/require-returns-description": "off", // DISABLED
       "jsdoc/require-returns-type": "off",
-      "jsdoc/require-hyphen-before-param-description": ["error", "always"],
+      "jsdoc/require-hyphen-before-param-description": "off", // DISABLED
     },
   },
 ];

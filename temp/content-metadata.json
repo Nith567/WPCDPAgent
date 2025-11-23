@@ -1,0 +1,18 @@
+[
+  {
+    "rootHash": "0x0052feea3faad5ec2f45c77cf4549b8e753292d8dc761a4cb873045eedfcf612",
+    "txHash": "0x42ef3edb90185b7aab581773bf143ac61414da4087e2b6b769f512d547bb871c",
+    "summary": "Web3 authentication simplifies app security by using wallet ownership instead of traditional logins, eliminating passwords, email verification, and credential storage. This method allows users to control their identity via cryptographic signing, reducing risks for developers. The guide explains how to build a Web3 login system in Next.js, covering wallet connection, signature verification, and backend authentication. The process is secure, borderless, and ideal for crypto and decentralized applications.",
+    "wallet_address": "0xa92c5291e21f4229fed9b0cde0c0d5fcbffff6b7",
+    "amount": 0.3,
+    "timestamp": "2025-11-23T10:19:08.715Z"
+  },
+  {
+    "rootHash": "0x9be7d5a2bcd959a881ca7097c08f90865da71a80cc3a85d589916566775af182",
+    "txHash": "0x475d057642b12906b4ac2f3bdcc09d9dc0045c99f0dffce697b5e4c86aea5475",
+    "summary": "The x402 protocol is a blockchain-agnostic payment standard that enables pay-per-use HTTP transactions by leveraging the **402 Payment Required** status code. When a client requests a resource, the server responds with payment requirements (e.g., amount, blockchain details, and destination address), which the client fulfills by including a signed **X-PAYMENT** header in a retried request. The server then verifies and settles the payment via dedicated **/verify** and **/settle** endpoints, ensuring secure and standardized microtransactions.",
+    "wallet_address": "0xa92c5291e21f4229fed9b0cde0c0d5fcbffff6b7",
+    "amount": 0.2,
+    "timestamp": "2025-11-23T10:41:52.295Z"
+  }
+]
