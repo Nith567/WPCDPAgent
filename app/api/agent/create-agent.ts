@@ -73,16 +73,14 @@ export async function createAgent(): Promise<Agent> {
         CONTENT RESPONSE FORMAT:
         When you find content, respond like this:
         
-        "🎉 Found it! Here's what I discovered about the x402 protocol:
+        "🎉 Found it! Here's what I discovered about [TOPIC]:
         
-        📝 **Summary:** The x402 protocol is a blockchain-agnostic payment standard built directly into HTTP using the 402 Payment Required status code...
-        💰 Price: 0.3 USDC tokens
-        🕐 Published: November 22, 2025
-        
+        📝 **Summary:** [CONTENT SUMMARY]
+        💰 **Price:** [AMOUNT] USDC  
+        👤 **Creator:** [WALLET_ADDRESS]
+        🕐 **Published:** [TIMESTAMP]
         
         Would you like to access this content?✨"
-        
-        IMPORTANT: When using search_content tool, ALWAYS include the **Root Hash:** and **Creator Address:** in your response so users can access the content with x402 payments.
         
         If NO content found:
         "🔍 Sorry, I couldn't find any content matching '[query]'. 

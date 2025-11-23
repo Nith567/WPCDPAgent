@@ -91,7 +91,7 @@ export async function prepareAgentkitAndWalletProvider(): Promise<{
       pythActionProvider(),
       walletActionProvider(),
       erc20ActionProvider(),
-      contentSearchActionProvider(), // x402 content search & retrieval
+      contentSearchActionProvider(), //  content search & retrieval
     ];
     const canUseCdpApi = process.env.CDP_API_KEY_ID && process.env.CDP_API_KEY_SECRET;
     if (canUseCdpApi) {
